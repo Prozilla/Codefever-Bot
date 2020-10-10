@@ -1,7 +1,7 @@
 const { prefix } = require("../config.json");
 module.exports = {
 	name: "help",
-	description: "List all commands with their description",
+	description: "List all commands or give information (name, description, aliases,...) of a specific command",
 	aliases: ["commands", "list"],
 	usage: "[command name]",
 	cooldown: 3,
@@ -10,16 +10,19 @@ module.exports = {
 		const { commands } = message.client;
 
 		if (!args.length) {
+			// Write list of commands
 			data.push("Here's a list of all my commands:");
-			data.push(commands.map(command => command.name).join(", "));
+			data.push("\n" + commands.map(command => prefix + command.name).join(", "));
 			data.push(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`);
 
 			return message.author.send(data, { split: true })
 				.then(() => {
+					// Inform user that they have received a DM containing the list of commands
 					if (message.channel.type === "dm") return;
 					message.reply("I've sent you a DM with all my commands!");
 				})
 				.catch(error => {
+					// User has most likely disabled DMs or blocked this bot
 					console.error(`Could not send help DM to ${message.author.tag}.\n`, error);
 					message.reply("it seems like I can't DM you! Do you have DMs disabled?");
 				});
@@ -32,6 +35,7 @@ module.exports = {
 			return message.reply("that's not a valid command!");
 		}
 
+		// Write info about a specific command
 		data.push(`**Name:** ${command.name}`);
 
 		if (command.aliases) data.push(`**Aliases:** ${command.aliases.join(", ")}`);
