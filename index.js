@@ -1,51 +1,40 @@
-// require the discord.js module
+const fs = require("fs");
 const Discord = require("discord.js");
 
-// create a new Discord client
 const config = require("./config.json");
 const client = new Discord.Client();
 
-// when the client is ready, run this code
-// this event will only trigger one time after logging in
+client.commands = new Discord.Collection();
+const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
+
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+
+	client.commands.set(command.name, command);
+}
+
 client.once("ready", () => {
-	console.log("-Prozilla's Bot: Active-");
+	console.log("-- BOT ACTIVATED --");
 });
 
-// Receive and send messages
 client.on("message", message => {
 
-	if (!message.content.startsWith(config.prefix) || message.author.bot || message.channel.name != "prozillas-bot") return;
+	if (!message.content.startsWith(config.prefix) || message.author.bot || message.channel.name != "prozillas-bot" || message.channel.name != "prozillas-bot") return;
 
-	const args = message.content.slice(config.prefix.length).trim().split(" ");
+	const args = message.content.slice(config.prefix.length).trim().split(/ +/);
 	const command = args.shift().toLowerCase();
 
 	console.log(`${message.author.avatar, message.author.username}: ` + message.content);
 
-	if (command === "ping") {
-		message.channel.send("Pong");
+	if (!client.commands.has(command)) return;
 
-	} else if (command === "pong") {
-		message.channel.send("ping");
-
-	} else if (command === "test") {
-		message.channel.send("Bot is working.");
-
-	} else if (command === "owner") {
-		message.channel.send(`${config.owner} made this bot.`);
-
-	} else if (command === "server") {
-		message.channel.send(`Server name: ${message.guild.name}\nTotal members: ${message.guild.memberCount}`);
-
-	} else if (command === "args-info") {
-		if (!args.length)
-		{
-			return message.channel.send(`You didn't provide any arguments, ${message.author}!`);
-		}
-
-		message.channel.send(`Command name: ${command}\nArguments: ${args}`);
+	try {
+		client.commands.get(command).execute(message, args);
+	} catch (error) {
+		console.error(error);
+		message.reply("there was an error trying to execute that command!");
 	}
 
 });
 
-// login to Discord with your app"s token
 client.login(config.token);
