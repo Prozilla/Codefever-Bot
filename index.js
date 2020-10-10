@@ -23,7 +23,11 @@ client.once("ready", () => {
 client.on("message", message => {
 
 	// Check command and place where command was sent
-	if (!message.content.startsWith(prefix) || message.author.bot || message.channel.name != "prozillas-bot" || message.channel.name != "prozillas-bot") return;
+	if (!message.content.startsWith(prefix) || message.author.bot) return;
+	if (!message.channel.type === "dm")
+	{
+		if (message.channel.name != "prozillas-bot") return;
+	}
 
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
@@ -32,9 +36,14 @@ client.on("message", message => {
 	console.log(`${message.author.avatar, message.author.username}: ` + message.content);
 
 	// Check if it's an existing command
-	if (!client.commands.has(commandName)) return;
+	const command = client.commands.get(commandName)
+		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
-	const command = client.commands.get(commandName);
+	if (!command) return;
+
+	if (command.perms) {
+		return message.reply("You don't have permission to execute this command.");
+	}
 
 	// Unnecessary because bot can only send in specific channels of servers
 	if (command.guildOnly && message.channel.type === "dm") {
@@ -68,6 +77,9 @@ client.on("message", message => {
 			const timeLeft = (expirationTime - now) / 1000;
 			return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
 		}
+
+		timestamps.set(message.author.id, now);
+		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 	}
 
 	// Executing command and catching errors
