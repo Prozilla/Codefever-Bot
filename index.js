@@ -1,12 +1,15 @@
 const fs = require("fs");
 const Discord = require("discord.js");
 
-const config = require("./config.json");
+const { prefix, token, owner } = require("./config.json");
 const client = new Discord.Client();
 
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
 
+const cooldowns = new Discord.Collection();
+
+// Add commands to client.commands
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 
@@ -19,17 +22,57 @@ client.once("ready", () => {
 
 client.on("message", message => {
 
-	if (!message.content.startsWith(config.prefix) || message.author.bot || message.channel.name != "prozillas-bot" || message.channel.name != "prozillas-bot") return;
+	// Check command and place where command was sent
+	if (!message.content.startsWith(prefix) || message.author.bot || message.channel.name != "prozillas-bot" || message.channel.name != "prozillas-bot") return;
 
-	const args = message.content.slice(config.prefix.length).trim().split(/ +/);
-	const command = args.shift().toLowerCase();
+	const args = message.content.slice(prefix.length).trim().split(/ +/);
+	const commandName = args.shift().toLowerCase();
 
+	// Display commands in the console
 	console.log(`${message.author.avatar, message.author.username}: ` + message.content);
 
-	if (!client.commands.has(command)) return;
+	// Check if it's an existing command
+	if (!client.commands.has(commandName)) return;
 
+	const command = client.commands.get(commandName);
+
+	// Unnecessary because bot can only send in specific channels of servers
+	if (command.guildOnly && message.channel.type === "dm") {
+		return message.reply("I can't execute that command inside DMs!");
+	}
+
+	// Check if command needs arguments and if so and no arguments are given tell user
+	if (command.args && !args.length) {
+		let reply = `You didn't provide any arguments, ${message.author}!`;
+
+		if (command.usage) {
+			reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
+		}
+
+		return message.channel.send(reply);
+	}
+
+	// Cooldown
+	if (!cooldowns.has(command.name)) {
+		cooldowns.set(command.name, new Discord.Collection());
+	}
+
+	const now = Date.now();
+	const timestamps = cooldowns.get(command.name);
+	const cooldownAmount = (command.cooldown || 3) * 1000;
+
+	if (timestamps.has(message.author.id)) {
+		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+		if (now < expirationTime) {
+			const timeLeft = (expirationTime - now) / 1000;
+			return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+		}
+	}
+
+	// Executing command and catching errors
 	try {
-		client.commands.get(command).execute(message, args);
+		command.execute(message, args);
 	} catch (error) {
 		console.error(error);
 		message.reply("there was an error trying to execute that command!");
@@ -37,4 +80,4 @@ client.on("message", message => {
 
 });
 
-client.login(config.token);
+client.login(token);
