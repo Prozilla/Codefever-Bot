@@ -1,8 +1,8 @@
 module.exports = {
 	name: "pet",
-    description: "Pet the dino",
-    aliases: ["petthedino", "petdino"],
+	description: "Pet the dino",
+	aliases: ["petthedino", "petdino"],
 	execute(message, args) {
-		message.channel.send("boop");
+		message.channel.send("This command is a WIP");
 	},
 };

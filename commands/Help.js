@@ -14,7 +14,7 @@ module.exports = {
 			const Embed = new Discord.MessageEmbed()
 				.setColor("NAVY")
 				.setTitle("!Help - A list of all commands")
-				.attachFiles(["./ProzillasBot.png"])
+				.attachFiles(["../ProzillasBot.png"])
 				.setAuthor("Prozilla", "attachment://ProzillasBot.png")
 				.setDescription(`This is a list of commands I can execute, \nsend \`${prefix}help [command name]\` to get info on a specific command`)
 				.setThumbnail("attachment://ProzillasBot.png")

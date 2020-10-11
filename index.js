@@ -8,8 +8,6 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
 
-const cooldowns = new Discord.Collection();
-
 // Add commands to client.commands
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -17,6 +15,7 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
+// Logging that the bot has activated
 client.once("ready", () => {
 	console.log("-- BOT ACTIVATED --");
 });
@@ -48,11 +47,9 @@ client.on("message", message => {
 	}
 
 	// Check if user has permissions to execute this command
-	/*
-	if (command.perms && !message.author.hasPermission(command.perms)) {
+	if (message.channel.type != "dm" && command.perms && !message.member.hasPermission(command.perms)) {
 		return message.reply("You don't have permission to execute this command.");
 	}
-	*/
 
 	// Check if command needs arguments and if so and no arguments are given tell user
 	if (command.args && !args.length) {
@@ -65,29 +62,6 @@ client.on("message", message => {
 		return message.channel.send(reply);
 	}
 
-	// Cooldown
-	/*
-	if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
-	}
-
-	const now = Date.now();
-	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 3) * 1000;
-
-	if (timestamps.has(message.author.id)) {
-		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-
-		if (now < expirationTime) {
-			const timeLeft = (expirationTime - now) / 1000;
-			return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
-		}
-
-		timestamps.set(message.author.id, now);
-		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-	}
-	*/
-
 	// Executing command and catching errors
 	try {
 		command.execute(message, args);
@@ -96,6 +70,15 @@ client.on("message", message => {
 		message.reply("there was an error trying to execute that command!");
 	}
 
+});
+
+// Handling errors
+client.on("shardError", error => {
+	console.error("A websocket connection encountered an error:", error);
+});
+
+process.on("unhandledRejection", error => {
+	console.error("Unhandled promise rejection:", error);
 });
 
 client.login(token);
