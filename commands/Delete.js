@@ -1,7 +1,7 @@
 module.exports = {
 	name: "delete",
 	description: "Delete a specific amount of messages",
-	perms: true,
+	perms: "DELETE_MESSAGES",
 	aliases: ["remove"],
 	execute(message, args) {
 		const amount = parseInt(args[0]);

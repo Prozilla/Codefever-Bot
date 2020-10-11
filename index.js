@@ -1,7 +1,8 @@
 const fs = require("fs");
 const Discord = require("discord.js");
 
-const { prefix, token, owner } = require("./config.json");
+const { prefix, owner } = require("./config.json");
+const { token } = require("./token.json");
 const client = new Discord.Client();
 
 client.commands = new Discord.Collection();
@@ -41,14 +42,17 @@ client.on("message", message => {
 
 	if (!command) return;
 
-	if (command.perms) {
-		return message.reply("You don't have permission to execute this command.");
-	}
-
-	// Unnecessary because bot can only send in specific channels of servers
+	// Check if the command is only for guilds and if the message was sent trough DMs
 	if (command.guildOnly && message.channel.type === "dm") {
 		return message.reply("I can't execute that command inside DMs!");
 	}
+
+	// Check if user has permissions to execute this command
+	/*
+	if (command.perms && !message.author.hasPermission(command.perms)) {
+		return message.reply("You don't have permission to execute this command.");
+	}
+	*/
 
 	// Check if command needs arguments and if so and no arguments are given tell user
 	if (command.args && !args.length) {
