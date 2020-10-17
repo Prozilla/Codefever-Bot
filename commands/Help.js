@@ -4,7 +4,7 @@ module.exports = {
 	name: "help",
 	description: "List all commands or give information (name, description, aliases,...) of a specific command",
 	aliases: ["commands", "list"],
-	usage: "[command name]",
+	usage: "!help [command]",
 	execute(message, args) {
 		const data = [];
 		const { commands } = message.client;
@@ -14,23 +14,16 @@ module.exports = {
 			const Embed = new Discord.MessageEmbed()
 				.setColor("NAVY")
 				.setTitle("!Help - A list of all commands")
-				.attachFiles(["../ProzillasBot.png"])
-				.setAuthor("Prozilla", "attachment://ProzillasBot.png")
+				.attachFiles(["./Icon.png"])
+				.setAuthor("Prozilla", "attachment://Icon.png")
 				.setDescription(`This is a list of commands I can execute, \nsend \`${prefix}help [command name]\` to get info on a specific command`)
-				.setThumbnail("attachment://ProzillasBot.png")
+				.setThumbnail("attachment://Icon.png")
 				.addField("\u200b", "\u200b")
 				.setTimestamp()
-				.setFooter("Contact @ProzillaGaming#0629 if any problems occur when executing one of my commands.", "attachment://ProzillasBot.png");
+				.setFooter("Contact @ProzillaGaming#0629 if any problems occur when executing one of my commands.", "attachment://Icon.png");
 
 			commands.forEach(element => Embed.addField(`name: ${prefix}` + element.name, "Description: " + element.description));
 			Embed.addField("\u200b", "\u200b");
-
-			// Write list of commands
-			/*
-			data.push("Here's a list of all my commands:");
-			data.push("\n" + commands.map(command => prefix + command.name).join(", "));
-			data.push(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`);
-			*/
 
 			return message.author.send(Embed)
 				.then(() => {
