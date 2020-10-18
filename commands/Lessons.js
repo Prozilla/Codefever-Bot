@@ -11,9 +11,9 @@ module.exports = {
 			data.push(`date: ${element.date}`);
 			if (element.live)
 			{
-				data.push(`diff live: ${element.live}`);
+				data.push(`live: ${element.live}`);
 			} else {
-				data.push(`yaml live: ${element.live}`);
+				data.push(`live: ${element.live}`);
 			}
 		});
 
