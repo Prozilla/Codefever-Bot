@@ -14,7 +14,6 @@ class doc {
 		this.link = link;
 	}
 }
-
 const docs = [
 	new doc("kali", "https://www.kali.org/docs/"),
 	new doc("introduction", "https://www.kali.org/docs/introduction/"),
@@ -31,6 +30,22 @@ const docs = [
 	new doc("development", "https://www.kali.org/docs/development/"),
 	new doc("community", "https://www.kali.org/docs/community/"),
 	new doc("policy", "https://www.kali.org/docs/policy/"),
+];
+
+class lesson {
+	constructor(name, number, date) {
+		this.name = name;
+		this.number = number;
+		this.date = date;
+	}
+}
+const lessons = [
+	new lesson("Basiskennis", 1, "unknown"),
+	new lesson("Netwerken", 2, "unknown"),
+	new lesson("Intro Linux & Labo opzetten", 3, "unknown"),
+	new lesson("Passieve enumeratie", 4, "unknown"),
+	new lesson("Actieve enumeratie en machine toevoegen aan labo", 5, "unknown"),
+	new lesson("Webservers en het HTTP protocol", 5, "unknown"),
 ];
 
 // Add commands to client.commands
@@ -83,6 +98,9 @@ client.on("message", message => {
 		if (command.name == "doc")
 		{
 			command.execute(message, args, docs);
+		} else if (command.name == "lesson")
+		{
+			command.execute(message, args, lessons);
 		} else {
 			command.execute(message, args);
 		}

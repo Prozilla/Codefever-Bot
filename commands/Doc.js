@@ -8,7 +8,6 @@ module.exports = {
 	usage: "!doc [command]",
 	execute(message, args, docs) {
 		const data = [];
-		const { commands } = message.client;
 
 		if (!args.length) {
 			// inside a command, event listener, etc.
