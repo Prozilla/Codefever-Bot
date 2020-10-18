@@ -14,7 +14,7 @@ module.exports = {
 			const Embed = new Discord.MessageEmbed()
 				.setColor("NAVY")
 				.setTitle("!doc - A list of all documentations")
-				.attachFiles(["./Icon.png"])
+				.attachFiles(["./files/Icon.png"])
 				.setAuthor("Codefever Bot", "attachment://Icon.png")
 				.setDescription(`This is a list of documentations I have, \nsend \`${this.usage}\` to get info on a specific command`)
 				.setThumbnail("attachment://Icon.png")
