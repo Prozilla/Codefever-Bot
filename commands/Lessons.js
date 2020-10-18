@@ -6,14 +6,17 @@ module.exports = {
 	execute(message, args, lessons) {
 		const data = [];
 
-		if (!args)
-		{
-			lessons.forEach(element => {
-				data.push(`**name:** ${element.name}`);
-				data.push(`**number:** ${element.number}`);
-				data.push(`**date:** ${element.date}`);
-			});
-		}
+		lessons.forEach(element => {
+			data.push(`**name: #${element.number} ${element.name}**`);
+			data.push(`date: ${element.date}`);
+			if (element.live)
+			{
+				data.push(`diff live: ${element.live}`);
+			} else {
+				data.push(`yaml live: ${element.live}`);
+			}
+		});
+
 		message.channel.send(data, { split: true });
 	},
 };

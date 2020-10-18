@@ -33,19 +33,20 @@ const docs = [
 ];
 
 class lesson {
-	constructor(name, number, date) {
+	constructor(name, number, date, live) {
 		this.name = name;
 		this.number = number;
 		this.date = date;
+		this.live = live;
 	}
 }
 const lessons = [
-	new lesson("Basiskennis", 1, "unknown"),
-	new lesson("Netwerken", 2, "unknown"),
-	new lesson("Intro Linux & Labo opzetten", 3, "unknown"),
-	new lesson("Passieve enumeratie", 4, "unknown"),
-	new lesson("Actieve enumeratie en machine toevoegen aan labo", 5, "unknown"),
-	new lesson("Webservers en het HTTP protocol", 5, "unknown"),
+	new lesson("Basiskennis", 1, "26/9/2020", true),
+	new lesson("Netwerken", 2, "26/9/2020", true),
+	new lesson("Intro Linux & Labo opzetten", 3, "26/9/2020", true),
+	new lesson("Passieve enumeratie", 4, "3/10/2020", false),
+	new lesson("Actieve enumeratie en machine toevoegen aan labo", 5, "10/10/2020", false),
+	new lesson("Webservers en het HTTP protocol", 6, "17/10/2020", false),
 ];
 
 // Add commands to client.commands
@@ -98,7 +99,7 @@ client.on("message", message => {
 		if (command.name == "doc")
 		{
 			command.execute(message, args, docs);
-		} else if (command.name == "lesson")
+		} else if (command.name == "lessons")
 		{
 			command.execute(message, args, lessons);
 		} else {
