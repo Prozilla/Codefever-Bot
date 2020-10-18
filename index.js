@@ -8,6 +8,31 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
 
+class doc {
+	constructor(name, link) {
+		this.name = name;
+		this.link = link;
+	}
+}
+
+const docs = [
+	new doc("kali", "https://www.kali.org/docs/"),
+	new doc("introduction", "https://www.kali.org/docs/introduction/"),
+	new doc("installation", "https://www.kali.org/docs/installation/"),
+	new doc("virtualization", "https://www.kali.org/docs/virtualization/"),
+	new doc("usb", "https://www.kali.org/docs/usb/"),
+	new doc("arm", "https://www.kali.org/docs/arm/"),
+	new doc("containers", "https://www.kali.org/docs/containers/"),
+	new doc("wsl", "https://www.kali.org/docs/wsl/"),
+	new doc("nethunter", "https://www.kali.org/docs/nethunter/"),
+	new doc("general-use", "https://www.kali.org/docs/general-use/"),
+	new doc("tools", "https://www.kali.org/docs/tools/"),
+	new doc("troubleshooting", "https://www.kali.org/docs/troubleshooting/"),
+	new doc("development", "https://www.kali.org/docs/development/"),
+	new doc("community", "https://www.kali.org/docs/community/"),
+	new doc("policy", "https://www.kali.org/docs/policy/"),
+];
+
 // Add commands to client.commands
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -23,11 +48,7 @@ client.once("ready", () => {
 client.on("message", message => {
 
 	// Check command and place where command was sent
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
-	if (!message.channel.type === "dm")
-	{
-		if (message.channel.name != "prozillas-bot") return;
-	}
+	if (!message.content.startsWith(prefix) || message.author.bot || message.channel.type === "dm" || message.channel.name != "codefever-bot") return;
 
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
@@ -41,13 +62,8 @@ client.on("message", message => {
 
 	if (!command) return;
 
-	// Check if the command is only for guilds and if the message was sent trough DMs
-	if (command.guildOnly && message.channel.type === "dm") {
-		return message.reply("I can't execute that command inside DMs!");
-	}
-
 	// Check if user has permissions to execute this command
-	if (message.channel.type != "dm" && command.perms && !message.member.hasPermission(command.perms)) {
+	if (command.perms && !message.member.hasPermission(command.perms)) {
 		return message.reply("You don't have permission to execute this command.");
 	}
 
@@ -64,7 +80,12 @@ client.on("message", message => {
 
 	// Executing command and catching errors
 	try {
-		command.execute(message, args);
+		if (command.name == "doc")
+		{
+			command.execute(message, args, docs);
+		} else {
+			command.execute(message, args);
+		}
 	} catch (error) {
 		console.error(error);
 		message.reply("there was an error trying to execute that command!");
