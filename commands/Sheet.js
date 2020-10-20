@@ -4,6 +4,6 @@ module.exports = {
 	aliases: ["cheatsheet", "cheat-sheet"],
 	usage: "!sheet",
 	execute(message, args) {
-		message.channel.send({ files: ["./CheatSheet.png"] });
+		message.channel.send({ files: ["./files/CheatSheet.png"] });
 	},
 };
