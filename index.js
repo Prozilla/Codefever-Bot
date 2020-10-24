@@ -47,6 +47,25 @@ const lessons = [
 	new lesson("Passieve enumeratie", 4, "3/10/2020", false),
 	new lesson("Actieve enumeratie en machine toevoegen aan labo", 5, "10/10/2020", false),
 	new lesson("Webservers en het HTTP protocol", 6, "17/10/2020", false),
+	new lesson("Unknown", 7, "24/10/2020", true),
+	new lesson("Unknown", 8, "24/10/2020", true),
+	new lesson("Unknown", 9, "24/10/2020", true),
+];
+
+class gif {
+	constructor(name, description, aliases) {
+		this.name = name;
+		this.description = description;
+		this.aliases = aliases;
+		this.path = `./gifs/${name.toLowerCase()}.gif`;
+	}
+}
+const gifs = [
+	new gif("axano", "BOOM", ["hackedbyaxano", "hacked"]),
+	new gif("ema", "Pet the Ema!", ["emmanouil", "pettheema"]),
+	new gif("hacker", "Hacking time!", ["hacking", "hacker-man", "hackerman", "hack"]),
+	new gif("mesaback", "Mesa back!", ["mesa", "mesa-back", "jarjar", "jar-jar"]),
+	new gif("petthedino", "Pet the dino!", ["pet", "petdino", "prozilla"]),
 ];
 
 // Add commands to client.commands
@@ -79,8 +98,8 @@ client.on("message", message => {
 	if (!command) return;
 
 	// Check if user has permissions to execute this command
-	if (command.perms && !message.member.hasPermission(command.perms)) {
-		return message.reply("You don't have permission to execute this command.");
+	if (command.perms && !message.member.hasPermission(command.perms) || command.userID && message.author.id != command.userID) {
+		return message.reply("you don't have permission to execute this command.");
 	}
 
 	// Check if command needs arguments and if so and no arguments are given tell user
@@ -102,6 +121,9 @@ client.on("message", message => {
 		} else if (command.name == "lessons")
 		{
 			command.execute(message, args, lessons);
+		} else if (command.name == "gif")
+		{
+			command.execute(message, args, gifs);
 		} else {
 			command.execute(message, args);
 		}
