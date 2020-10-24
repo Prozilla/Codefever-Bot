@@ -47,9 +47,9 @@ const lessons = [
 	new lesson("Passieve enumeratie", 4, "3/10/2020", false),
 	new lesson("Actieve enumeratie en machine toevoegen aan labo", 5, "10/10/2020", false),
 	new lesson("Webservers en het HTTP protocol", 6, "17/10/2020", false),
-	new lesson("Unknown", 7, "24/10/2020", true),
-	new lesson("Unknown", 8, "24/10/2020", true),
-	new lesson("Unknown", 9, "24/10/2020", true),
+	new lesson("Exploitatie", 7, "24/10/2020", true),
+	new lesson("Paswoordaanvallen", 8, "31/10/2020", false),
+	new lesson("Bash scripting en Linux trucs", 9, "7/10/2020", false),
 ];
 
 class gif {
