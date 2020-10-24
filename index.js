@@ -63,7 +63,7 @@ class gif {
 const gifs = [
 	new gif("axano", "BOOM", ["hackedbyaxano", "hacked"]),
 	new gif("ema", "Pet the Ema!", ["emmanouil", "pettheema"]),
-	new gif("hacker", "Hacking time!", ["hacking", "hacker-man", "hackerman", "hack"]),
+	new gif("hacker", "hacker", ["hacking", "hacker-man", "hackerman", "hack"]),
 	new gif("mesaback", "Mesa back!", ["mesa", "mesa-back", "jarjar", "jar-jar"]),
 	new gif("petthedino", "Pet the dino!", ["pet", "petdino", "prozilla"]),
 ];
