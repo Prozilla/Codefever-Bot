@@ -82,6 +82,16 @@ client.once("ready", () => {
 	console.log("-- BOT ACTIVATED --");
 });
 
+client.on("ready", () => {
+	try {
+		client.user.setPresence({ game: { name: "Hacking Simulator v2.5", type: "PLAYING" }, status: "online" });
+		console.log(client.user.presence);
+	} catch (error) {
+		console.log("There was an error while trying to set presence.");
+	}
+});
+
+// Receive messages and respond
 client.on("message", message => {
 
 	// Check command and place where command was sent
