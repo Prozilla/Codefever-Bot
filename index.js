@@ -1,6 +1,8 @@
 const fs = require("fs");
 const Discord = require("discord.js");
 
+process.stdin.setEncoding("utf8");
+
 const { prefix, owner } = require("./config.json");
 const { token } = require("./token.json");
 const client = new Discord.Client();
@@ -83,7 +85,8 @@ client.once("ready", () => {
 client.on("message", message => {
 
 	// Check command and place where command was sent
-	if (!message.content.startsWith(prefix) || message.author.bot || message.channel.type === "dm" || message.channel.name != "codefever-bot") return;
+	if (!message.content.startsWith(prefix) || message.author.bot || message.channel.type === "dm" || message.guild.name != "Codefever-Anonymous" && message.channel.name != "codefever-bot") return;
+	if (message.guild.name == "Codefever-Anonymous" && message.channel.name == "uselessbot") return;
 
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
@@ -132,6 +135,15 @@ client.on("message", message => {
 		message.reply("there was an error trying to execute that command!");
 	}
 
+});
+
+process.stdin.on("readable", () => {
+	let chunk;
+	while ((chunk = process.stdin.read()) !== null) {
+		const guild = client.guilds.cache.find(guil => guil.name === "Codefever-Anonymous");
+		const channel = guild.channels.cache.find(chann => chann.name === "codefever-bot");
+		channel.send(chunk);
+	}
 });
 
 // Handling errors
