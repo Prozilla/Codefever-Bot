@@ -68,6 +68,7 @@ const gifs = [
 	new gif("hacker", "hacker", ["hacking", "hacker-man", "hackerman", "hack"]),
 	new gif("mesaback", "Mesa back!", ["mesa", "mesa-back", "jarjar", "jar-jar"]),
 	new gif("petthedino", "Pet the dino!", ["pet", "petdino", "prozilla"]),
+	new gif("rampsy", "Spikey the hedgehog", ["chiel", "spikey", "spikeyboi", "spikeyboii", "hedgehog"]),
 ];
 
 // Add commands to client.commands
